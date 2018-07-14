@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
         return message.channel.send(':x: Please provide a user to kick.');
 
     if (target.hasPermission('KICK_MEMBERS'))
-        return message.channel.send(':x: Sorry, but you can not kick fellow staff members.');
+        return message.channel.send(':x: Sorry, but you may not kick a fellow staff member.');
 
     if (reason) {
         await target.send(`You have been kicked due to **${reason}**`);
