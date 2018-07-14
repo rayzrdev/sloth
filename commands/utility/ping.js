@@ -1,6 +1,6 @@
 exports.run = async (client, message) => {
-    const m = await message.channel.send('Ping!');
-    m.edit(`Pong! \`${m.createdTimestamp - message.createdTimestamp}ms\``);
+    const m = await message.channel.send(':stopwatch: Ping!');
+    m.edit(`:stopwatch: Pong! \`${m.createdTimestamp - message.createdTimestamp}ms\``);
 };
 
 exports.info = {
