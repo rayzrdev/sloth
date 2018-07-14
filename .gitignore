@@ -1,3 +1,6 @@
 node_modules
 .vs
 *.log
+
+# don't want to share the token!
+/config.json
