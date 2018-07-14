@@ -50,6 +50,7 @@ readdir.fileSync(path.join(__dirname, 'commands'))
     });
 
 client.on('ready', () => {
+    client.user.setActivity(`over ${client.users.size} users | ${config.prefix}help`, { type: 'WATCHING' });
     console.log(`Sloth connected to ${client.guilds.size} guilds and ${client.users.size} users.`);
     console.log(`Default prefix: ${config.prefix}`);
     console.log('Generating invite...');
