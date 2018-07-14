@@ -26,17 +26,24 @@ readdir.fileSync(path.join(__dirname, 'commands'))
     .filter(file => file.endsWith('.js'))
     .forEach(commandFile => {
         try {
-            const commandObject = require(commandFile);
+            const commands = [].concat(require(commandFile));
 
-            if (typeof commandObject !== 'object') {
-                throw 'Expected object from command file!';
-            } else if (typeof commandObject.run !== 'function') {
-                throw 'Command is missing run method!';
-            } else if (typeof commandObject.info !== 'object') {
-                throw 'Missing command info object!';
-            }
+            commands.forEach(command => {
+                if (typeof command !== 'object') {
+                    throw 'Expected object from command file!';
+                } else if (typeof command.run !== 'function') {
+                    throw 'Command is missing run method!';
+                } else if (typeof command.info !== 'object') {
+                    throw 'Missing command info object!';
+                }
 
-            client.commands.set(commandObject.info.name, commandObject);
+                client.commands.set(command.info.name, command);
+
+                // hack solution: register the command under aliases, as well
+                if (command.info.aliases instanceof Array) {
+                    command.info.aliases.forEach(alias => client.commands.set(alias, command));
+                }
+            });
         } catch (err) {
             console.error(`Failed to load command file '${commandFile}':`, err);
         }

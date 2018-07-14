@@ -5,5 +5,6 @@ exports.run = async (client, message) => {
 
 exports.info = {
     name: 'ping',
+    aliases: ['p'],
     description: 'Pings the bot.'
 };
