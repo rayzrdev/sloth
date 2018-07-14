@@ -10,5 +10,8 @@
     "fs-extra": "^6.0.1",
     "package.json": "^2.0.1",
     "readdir-recursive": "^0.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.1.0"
   }
 }
