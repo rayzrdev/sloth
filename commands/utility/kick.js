@@ -1,22 +1,29 @@
 exports.run = async (client, message, args) => {
-    let target = message.mentions.members.first() || message.guild.members.get(args[0]); // Gets the mentioned member.
-    let reason = args.slice(1).join(' ');
-
-    if (!message.member.hasPermission('KICK_MEMBERS'))
-        return message.channel.send(':x: Sorry, but you do not have the required permission node `KICK_MEMBERS`.');
-
-    if (!target)
-        return message.channel.send(':x: Please provide a user to kick.');
-
-    if (target.hasPermission('KICK_MEMBERS'))
-        return message.channel.send(':x: Sorry, but you may not kick a fellow staff member.');
-
-    if (reason) {
-        await target.send(`You have been kicked due to **${reason}**`);
+    const member = message.mentions.members.first() || message.guild.members.get(args[0]);
+    const reason = args.slice(1).join(' ');
+    
+    if (args.length < 2) {
+        throw ':x: Please provide both a user and a reason.';
+    }
+    
+    if (!member) {
+        throw ':x: Sorry, but that user could not be found.';
+    }
+    
+    if (!message.member.hasPermission('KICK_MEMBERS') {
+        throw ':x: Sorry, but requires the following permission node `KICK_MEMBERS`.'
+    }
+        
+    if (member.hasPermission('KICK_MEMBERS') {
+        throw ':x: Sorry, but you may not kick a fellow staff member.'
     }
 
-    target.kick(`Kicked by ${message.author.tag}`);
-    message.channel.send(`:white_check_mark: ${target} has been successfully kicked.`);
+    if (reason) {
+        await member.send(`You were kicked for **${reason}**`);
+    }
+    
+    member.kick(reason);
+    message.channel.send(`:white_check_mark: **${member.user.tag}** has been successfully kicked.`);
 };
 
 exports.info = {
