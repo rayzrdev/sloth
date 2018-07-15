@@ -2,20 +2,20 @@ exports.run = async (client, message, args) => {
     const target = message.mentions.members.first() || message.guild.members.get(args[0]);
     const reason = args.slice(1).join(' ');
     
+    if (!message.member.hasPermission('KICK_MEMBERS')) {
+        throw 'Sorry, but requires the following permission node `KICK_MEMBERS`.'
+    }
+
     if (args.length < 2) {
-        throw ':x: Please provide both a user and a reason.';
+        throw 'Please provide both a user and a reason.';
     }
     
     if (!target) {
-        throw ':x: Sorry, but that user could not be found.';
-    }
-    
-    if (!message.member.hasPermission('KICK_MEMBERS')) {
-        throw ':x: Sorry, but requires the following permission node `KICK_MEMBERS`.'
+        throw 'Sorry, but that user could not be found.';
     }
         
     if (target.hasPermission('KICK_MEMBERS')) {
-        throw ':x: Sorry, but you may not kick a fellow staff member.'
+        throw 'Sorry, but you may not kick a fellow staff member.'
     }
 
     if (reason) {
