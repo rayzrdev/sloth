@@ -57,7 +57,7 @@ client.on('ready', () => {
     client.generateInvite(['ADMINISTRATOR']).then(console.log);
 });
 
-client.on('message', message => {
+client.on('message', async message => {
     // Only users can trigger commands.
     if (message.author.bot) return;
 
@@ -70,7 +70,20 @@ client.on('message', message => {
     let command = client.commands.get(commandLabel);
 
     if (command) {
-        command.run(client, message, args);
+        try {
+            await command.run(client, message, args);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(`Error running command '${command.info.name}' with args [${args.map(arg => `"${arg}"`).join(', ')}]:`, error);
+            }
+            
+            let errorMessage = error instanceof Error ? error.message : error;
+            if (errorMessage) {
+                message.channel.send(`:x: ${errorMessage}`);
+            } else {
+                message.channel.send(':x: An unknown error has occurred!');
+            }
+        }
     }
 });
 
