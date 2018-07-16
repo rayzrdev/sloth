@@ -12,10 +12,8 @@ const config = (() => {
         if (!fse.existsSync('config.json')) {
             throw 'Config does not exist!';
         }
-
-        const contents = fse.readFileSync('config.json').toString();
-
-        return JSON.parse(contents);
+        
+        return fse.readJSONSync('config.json');
     } catch (err) {
         console.error('Failed to load config:', err);
         process.exit(1);
