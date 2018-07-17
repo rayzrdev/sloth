@@ -3,16 +3,16 @@ const discord = require('discord.js');
 const fse = require('fs-extra');
 const readdir = require('readdir-recursive');
 
+const CommandManager = require('./managers/commands');
+
 const client = new discord.Client();
 
-client.commands = new Map();
-
-const config = (() => {
+const config = client.config = (() => {
     try {
         if (!fse.existsSync('config.json')) {
             throw 'Config does not exist!';
         }
-        
+
         return fse.readJSONSync('config.json');
     } catch (err) {
         console.error('Failed to load config:', err);
@@ -20,38 +20,23 @@ const config = (() => {
     }
 })();
 
-readdir.fileSync(path.join(__dirname, 'commands'))
-    .filter(file => file.endsWith('.js'))
-    .forEach(commandFile => {
-        try {
-            const commands = [].concat(require(commandFile));
+global.paths = {
+    base: __dirname
+};
 
-            commands.forEach(command => {
-                if (typeof command !== 'object') {
-                    throw 'Expected object from command file!';
-                } else if (typeof command.run !== 'function') {
-                    throw 'Command is missing run method!';
-                } else if (typeof command.info !== 'object') {
-                    throw 'Missing command info object!';
-                }
+client.managers = {
+    commands: new CommandManager(client)
+};
 
-                client.commands.set(command.info.name, command);
-
-                // hack solution: register the command under aliases, as well
-                if (command.info.aliases instanceof Array) {
-                    command.info.aliases.forEach(alias => client.commands.set(alias, command));
-                }
-            });
-        } catch (err) {
-            console.error(`Failed to load command file '${commandFile}':`, err);
-        }
-    });
 
 client.on('ready', () => {
-    client.user.setActivity(`over ${client.users.size} users | ${config.prefix}help`, { type: 'WATCHING' });
+    client.managers.commands.init();
+
     console.log(`Sloth connected to ${client.guilds.size} guilds and ${client.users.size} users.`);
     console.log(`Default prefix: ${config.prefix}`);
     console.log('Generating invite...');
+
+    client.user.setActivity(`over ${client.users.size} users | ${config.prefix}help`, { type: 'WATCHING' });
     client.generateInvite(['ADMINISTRATOR']).then(console.log);
 });
 
@@ -59,30 +44,7 @@ client.on('message', async message => {
     // Only users can trigger commands.
     if (message.author.bot) return;
 
-    // Make sure the message starts with the prefix.
-    if (!message.content.startsWith(config.prefix)) return;
-
-    let args = message.content.substr(config.prefix.length).trim().split(' ');
-    let commandLabel = args.shift().toLowerCase();
-
-    let command = client.commands.get(commandLabel);
-
-    if (command) {
-        try {
-            await command.run(client, message, args);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error(`Error running command '${command.info.name}' with args [${args.map(arg => `"${arg}"`).join(', ')}]:`, error);
-            }
-            
-            let errorMessage = error instanceof Error ? error.message : error;
-            if (errorMessage) {
-                message.channel.send(`:x: ${errorMessage}`);
-            } else {
-                message.channel.send(':x: An unknown error has occurred!');
-            }
-        }
-    }
+    client.managers.commands.onMessage(message);
 });
 
 config.token && client.login(config.token).catch(console.error);
