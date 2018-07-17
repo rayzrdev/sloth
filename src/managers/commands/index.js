@@ -47,7 +47,7 @@ class CommandManager {
             return;
         }
 
-        if (command.info.guildOnly) {
+        if (command.info.guildOnly && !message.guild) {
             return message.channel.send(':x: That command can only be used in guilds. Sorry!');
         } else if (message.guild && command.info.permissions) {
             const missingPermission = [].concat(command.info.permissions)
