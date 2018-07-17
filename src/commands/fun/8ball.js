@@ -14,10 +14,9 @@ exports.run = async (client, message, args) => {
         throw 'Please provide a question.';
     }
 
-    // Will rename variable name.
     let randomResponse = responses[Math.floor(Math.random() * responses.length)];
 
-    message.channel.send(`:8ball: - *${randomResponse}*`);
+    message.channel.send(`:8ball: - ${randomResponse}`);
 };
 
 exports.info = {
