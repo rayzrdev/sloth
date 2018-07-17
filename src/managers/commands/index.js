@@ -47,7 +47,24 @@ class CommandManager {
             return;
         }
 
+        if (command.info.guildOnly) {
+            return message.channel.send(':x: That command can only be used in guilds. Sorry!');
+        } else if (message.guild && command.info.permissions) {
+            const missingPermission = [].concat(command.info.permissions)
+                .find(permission => !message.member.hasPermission(permission));
+
+            if (missingPermission) {
+                return message.channel.send(`:x: You need the permission \`${missingPermission}\` to do that. Nice try!`);
+            }
+        } else if (command.info.minArgs && args.length < command.info.minArgs) {
+            return this.showHelp(command);
+        }
+
         this.executeCommand(command, message, args);
+    }
+
+    showHelp(command) {
+        // TBA
     }
 
     async executeCommand(command, message, args) {
