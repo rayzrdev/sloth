@@ -6,6 +6,10 @@
   "repository": "https://github.com/RayzrDev/Sloth",
   "author": "Rayzr522 <rayzr522@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon -w src index.js"
+  },
   "dependencies": {
     "discord.js": "^11.3.2",
     "erlpack": "^0.1.2",
@@ -15,6 +19,7 @@
     "uws": "^10.148.1"
   },
   "devDependencies": {
-    "eslint": "^5.1.0"
+    "eslint": "^5.1.0",
+    "nodemon": "^1.18.3"
   }
 }
