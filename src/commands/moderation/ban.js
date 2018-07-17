@@ -2,10 +2,6 @@ exports.run = async (client, message, args) => {
     const target = message.mentions.members.first() || message.guild.members.get(args[0]);
     const reason = args.slice(1).join(' ');
 
-    if (!message.member.hasPermission('BAN_MEMBERS')) {
-        throw 'Sorry, but requires the following permission node `BAN_MEMBERS`.';
-    }
-
     if (args.length < 2) {
         throw 'Please provide both a user and a reason.';
     }
@@ -19,7 +15,15 @@ exports.run = async (client, message, args) => {
     }
 
     if (reason) {
-        await target.send(`You were banned for **${reason}**`);
+        const discord = require('discord.js');
+        const embed = new discord.RichEmbed()
+            .setColor(0xff6868)
+            .setAuthor(`${target.user.tag}`, `${target.user.avatarURL}`)
+            .setTitle('You have been banned!')
+            .addField('By:', `${message.author.tag} (ID: ${message.author.id})`)
+            .addField('Reason:', `${reason}`)
+            .setTimestamp();
+        await target.send({ embed });
     }
 
     target.ban(reason);
@@ -29,5 +33,7 @@ exports.run = async (client, message, args) => {
 exports.info = {
     name: 'ban',
     usage: 'ban <user> [reason]',
-    description: 'Bans a user.'
+    description: 'Bans a user.',
+    permissions: ['BAN_MEMBERS'],
+    guildOnly: true
 };
