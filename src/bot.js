@@ -25,7 +25,8 @@ global.paths = {
 };
 
 client.managers = {
-    commands: new CommandManager(client)
+    commands: new CommandManager(client),
+    profiles: require('./data/profiles')
 };
 
 
