@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node .",
+    "background": "screen -dmS sloth yarn start",
     "dev": "nodemon -w src index.js"
   },
   "dependencies": {
