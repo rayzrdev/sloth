@@ -9,9 +9,7 @@ const createProfile = async (id, options = {}) => {
         friends: []
     }, options);
 
-    console.log('Created...');
     const response = await db.put(profileOptions);
-    console.log('Response: ' + response);
     if (response.ok) {
         return profileOptions;
     }
