@@ -20,8 +20,8 @@ exports.run = async (client, message, args) => {
         .setDescription(profile.bio || '*This user has no biography.*')
         .setTitle(target.tag)
         .setThumbnail(target.avatarURL)
-        .addField('Money:', `$${profile.money}`)
-        .addField('XP:', `${profile.xp.toFixed(2)}`)
+        .addField('Money:', `${profile.money} :gem:`, true)
+        .addField('XP:', `${profile.xp.toFixed(2)} :sparkles:`, true)
         .addField('Friends:', profile.friends.map(id => {
             let user = client.users.get(id);
             if (user) {
