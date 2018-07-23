@@ -1,13 +1,11 @@
-const path = require('path');
 const discord = require('discord.js');
 const fse = require('fs-extra');
-const readdir = require('readdir-recursive');
 
 const CommandManager = require('./managers/commands');
 
 const client = new discord.Client();
 
-const config = client.config = (() => {
+const config = client.config = global.config = (() => {
     try {
         if (!fse.existsSync('config.json')) {
             throw 'Config does not exist!';
@@ -24,11 +22,12 @@ global.paths = {
     base: __dirname
 };
 
+global.factory = require('./util/factory');
+
 client.managers = {
     commands: new CommandManager(client),
     profiles: require('./data/profiles')
 };
-
 
 client.on('ready', () => {
     client.managers.commands.init();

@@ -1,5 +1,3 @@
-const { RichEmbed } = require('discord.js');
-
 exports.run = (client, message, args) => {
     if (args.length < 1 || !/^(#?)[0-9a-fA-F]{6}$/.test(args[0])) {
         throw 'Please input a valid hex code.';
@@ -12,7 +10,7 @@ exports.run = (client, message, args) => {
     const b = parseInt(color.substr(4, 2), 16);
 
     message.channel.send({
-        embed: new RichEmbed()
+        embed: global.factory.embed()
             .setTitle(`#${color}`)
             .setColor([r, g, b])
             .setImage(`http://placehold.it/100/${color}/${color}`)

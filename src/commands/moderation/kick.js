@@ -15,9 +15,7 @@ exports.run = async (client, message, args) => {
     }
 
     if (reason) {
-        const discord = require('discord.js');
-        const embed = new discord.RichEmbed()
-            .setColor(0xff6868)
+        const embed = global.factory.embed()
             .setAuthor(`${target.user.tag}`, `${target.user.avatarURL}`)
             .setTitle('You have been kicked!')
             .addField('By:', `${message.author.tag} (ID: ${message.author.id})`)

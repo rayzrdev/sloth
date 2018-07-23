@@ -1,5 +1,10 @@
 {
     "token": "get one at https://discordapp.com/developers/applications/me",
     "prefix": "s!",
-    "database": "127.0.0.1:5984"
+    "database": "127.0.0.1:5984",
+    "color": [
+        255,
+        104,
+        104
+    ]
 }

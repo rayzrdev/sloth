@@ -1,11 +1,9 @@
-const { RichEmbed } = require('discord.js');
-
 exports.run = async (client, message, args) => {
     const target = message.author;
 
     const profile = await client.managers.profiles.getOrCreateProfile(target.id);
     message.channel.send({
-        embed: new RichEmbed()
+        embed: global.factory.embed()
             .setTitle(target.tag)
             .addField('Money:', `$${profile.money}`)
             .addField('XP:', `${profile.xp.toFixed(2)}`)
